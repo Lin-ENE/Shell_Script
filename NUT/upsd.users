@@ -1,0 +1,5 @@
+# https://mritd.com/2023/03/18/ups-nut-configuration-tutorial/
+# upsd.users 配置文件用于定义通过网络连接到 nut-server 的用户名和密码, 该配置样例如下:
+[upsmon]
+        password = 123456
+        upsmon master
