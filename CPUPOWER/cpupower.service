@@ -1,0 +1,34 @@
+# /etc/systemd/system/cpupower.service
+
+[Unit]
+Description=Apply cpupower governor and frequency limits
+After=multi-user.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=-/etc/default/cpupower
+
+# 启动时：动态拼接参数（忽略未配置的变量）
+ExecStart=/bin/sh -c '\
+  ARGS=""; \
+  [ -n "$GOVERNOR" ] && ARGS="$ARGS -g $GOVERNOR"; \
+  [ -n "$MIN_FREQ" ] && ARGS="$ARGS -d $MIN_FREQ"; \
+  [ -n "$MAX_FREQ" ] && ARGS="$ARGS -u $MAX_FREQ"; \
+  if [ -n "$ARGS" ]; then \
+    /usr/bin/cpupower frequency-set $ARGS; \
+  fi'
+
+# 停止/关机时：恢复配置
+ExecStop=/bin/sh -c '\
+  ARGS=""; \
+  [ -n "$STOP_GOVERNOR" ] && ARGS="$ARGS -g $STOP_GOVERNOR"; \
+  [ -n "$STOP_MIN_FREQ" ] && ARGS="$ARGS -d $STOP_MIN_FREQ"; \
+  [ -n "$STOP_MAX_FREQ" ] && ARGS="$ARGS -u $STOP_MAX_FREQ"; \
+  if [ -n "$ARGS" ]; then \
+    /usr/bin/cpupower frequency-set $ARGS; \
+  fi'
+
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

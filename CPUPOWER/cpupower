@@ -1,0 +1,17 @@
+# /etc/default/cpupower
+
+# 注意：intel_pstate 驱动下只支持 performance 或 powersave
+GOVERNOR="performance"
+
+# 最低频率（硬件最低 400MHz）
+MIN_FREQ="400MHz"
+
+# 最高频率（直接解锁到硬件极限 5.00GHz）
+MAX_FREQ="5.00GHz"
+
+# --------------------------------------------------
+# 关机 / 停止服务时恢复省电模式
+# --------------------------------------------------
+STOP_GOVERNOR="powersave"
+STOP_MIN_FREQ="400MHz"
+STOP_MAX_FREQ="3.80GHz"
